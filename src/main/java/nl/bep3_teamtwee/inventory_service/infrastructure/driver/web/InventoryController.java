@@ -4,9 +4,10 @@ import nl.bep3_teamtwee.inventory_service.core.application.ItemsCommandHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsQueryHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
 import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemById;
-import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemByProductName;
+import nl.bep3_teamtwee.inventory_service.core.application.query.FindItemsByProductName;
 import nl.bep3_teamtwee.inventory_service.core.application.query.ListItems;
 import nl.bep3_teamtwee.inventory_service.core.domain.Item;
+import nl.bep3_teamtwee.inventory_service.core.domain.Unit;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.ItemNotFound;
 import nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request.RegisterItemRequest;
 import org.springframework.dao.DuplicateKeyException;
@@ -32,7 +33,7 @@ public class InventoryController {
 
     @PostMapping
     public Item registerItem(@Valid @RequestBody RegisterItemRequest request) {
-        return this.commandHandler.handle(new RegisterItem(request.productName, request.unit, request.capacity,
+        return this.commandHandler.handle(new RegisterItem(request.productName, Unit.valueOf(request.unit), request.capacity,
                 request.purchaseCapacity, request.sellCapacity, request.purchasePrice, request.sellPrice));
     }
 
@@ -42,8 +43,15 @@ public class InventoryController {
     }
 
     @GetMapping(params = {"productName"})
-    public Item getItemByProductName(@RequestParam String productName) {
-        return this.queryHandler.handle(new GetItemByProductName(productName));
+    public List<Item> findItemsByProductName(
+            @RequestParam String productName,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) String direction
+    ) {
+        return this.queryHandler.handle(
+                new FindItemsByProductName(productName, orderBy, direction)
+        );
+
     }
 
     @GetMapping

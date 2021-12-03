@@ -16,7 +16,7 @@ public class Item {
     @Id
     private UUID id;
 
-    @Indexed(unique = true)
+    @Indexed
     private String productName;
 
     private Unit unit;
@@ -41,6 +41,42 @@ public class Item {
         this.sellCapacity = sellCapacity;
         this.purchasePrice = purchasePrice;
         this.sellPrice = sellPrice;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getPurchaseCapacity() {
+        return purchaseCapacity;
+    }
+
+    public int getSellCapacity() {
+        return sellCapacity;
+    }
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public double getSellPrice() {
+        return sellPrice;
     }
 
     public void clearEvents() {

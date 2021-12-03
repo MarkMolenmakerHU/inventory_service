@@ -1,7 +1,7 @@
 package nl.bep3_teamtwee.inventory_service.core.application;
 
+import nl.bep3_teamtwee.inventory_service.core.application.query.FindItemsByProductName;
 import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemById;
-import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemByProductName;
 import nl.bep3_teamtwee.inventory_service.core.application.query.ListItems;
 import nl.bep3_teamtwee.inventory_service.core.domain.Item;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.ItemNotFound;
@@ -25,9 +25,9 @@ public class ItemsQueryHandler {
                 .orElseThrow(() -> new ItemNotFound(query.getId().toString()));
     }
 
-    public Item handle(GetItemByProductName query) {
-        return this.repository.findByProductName(query.getProductName())
-                .orElseThrow(() -> new ItemNotFound(query.getProductName()));
+    public List<Item> handle(FindItemsByProductName query) {
+        Sort sort = createSort(query.getOrderBy(), query.getDirection());
+        return this.repository.findByProductNameEquals(query.getProductName(), sort);
     }
 
     public List<Item> handle(ListItems query) {
