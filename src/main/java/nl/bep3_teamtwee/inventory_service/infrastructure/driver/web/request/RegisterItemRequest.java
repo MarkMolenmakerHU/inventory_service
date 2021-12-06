@@ -1,9 +1,6 @@
 package nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request;
 
-import nl.bep3_teamtwee.inventory_service.core.domain.Unit;
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 public class RegisterItemRequest {
