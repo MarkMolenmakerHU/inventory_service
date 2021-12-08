@@ -23,6 +23,21 @@ POST -> /inventory
 }
 ```
 
+Update an existing Item Request:
+PUT -> /inventory/{id}
+```json
+{
+  "productName": "Salami Slice",
+  "stock": 10,
+  "unit": "GRAMS",
+  "capacity": 3000,
+  "purchaseCapacity": 1000,
+  "sellCapacity": 25,
+  "purchasePrice": 1.50,
+  "sellPrice": 10
+}
+```
+
 Buy stock for an Item by ID Request:
 POST -> /inventory/{id}/stock
 
