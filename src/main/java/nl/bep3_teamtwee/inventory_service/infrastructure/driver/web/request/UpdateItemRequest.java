@@ -2,6 +2,7 @@ package nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 public class UpdateItemRequest {
 
@@ -11,7 +12,7 @@ public class UpdateItemRequest {
     @NotBlank
     public String unit;
 
-    @Positive
+    @PositiveOrZero
     public int stock;
 
     @Positive

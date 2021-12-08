@@ -41,4 +41,7 @@ PUT -> /inventory/{id}
 Buy stock for an Item by ID Request:
 POST -> /inventory/{id}/stock
 
+Delete an Item by ID Request:
+DELETE -> /inventory/{id}
+
 - Sell an Item

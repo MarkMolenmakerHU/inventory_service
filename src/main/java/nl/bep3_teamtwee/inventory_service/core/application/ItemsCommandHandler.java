@@ -1,6 +1,7 @@
 package nl.bep3_teamtwee.inventory_service.core.application;
 
 import nl.bep3_teamtwee.inventory_service.core.application.command.BuyStockForItemWithId;
+import nl.bep3_teamtwee.inventory_service.core.application.command.DeleteItem;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
 import nl.bep3_teamtwee.inventory_service.core.application.command.UpdateItem;
 import nl.bep3_teamtwee.inventory_service.core.domain.Item;
@@ -62,6 +63,14 @@ public class ItemsCommandHandler {
         this.repository.save(item);
 
         return item;
+    }
+
+    public void handle(DeleteItem command) {
+        Item item = this.repository.findById(command.getId())
+                .orElseThrow(() -> new ItemNotFound(command.getId().toString()));
+
+        this.publishEventsFor(item);
+        this.repository.delete(item);
     }
 
     private void publishEventsFor(Item item) {

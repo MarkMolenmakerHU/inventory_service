@@ -3,6 +3,7 @@ package nl.bep3_teamtwee.inventory_service.infrastructure.driver.web;
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsCommandHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsQueryHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.command.BuyStockForItemWithId;
+import nl.bep3_teamtwee.inventory_service.core.application.command.DeleteItem;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
 import nl.bep3_teamtwee.inventory_service.core.application.command.UpdateItem;
 import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemById;
@@ -73,6 +74,12 @@ public class InventoryController {
     public Item updateItemById(@PathVariable UUID id, @Valid @RequestBody UpdateItemRequest request) {
         return this.commandHandler.handle(new UpdateItem(id, request.productName, Unit.valueOf(request.unit), request.stock, request.capacity,
                 request.purchaseCapacity, request.sellCapacity, request.purchasePrice, request.sellPrice));    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItemById(@PathVariable UUID id) {
+        this.commandHandler.handle(new DeleteItem(id));
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     // Handlers
     @ExceptionHandler
