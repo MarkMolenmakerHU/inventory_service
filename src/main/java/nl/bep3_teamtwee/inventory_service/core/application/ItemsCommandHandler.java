@@ -2,6 +2,7 @@ package nl.bep3_teamtwee.inventory_service.core.application;
 
 import nl.bep3_teamtwee.inventory_service.core.application.command.BuyStockForItemWithId;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
+import nl.bep3_teamtwee.inventory_service.core.application.command.UpdateItem;
 import nl.bep3_teamtwee.inventory_service.core.domain.Item;
 import nl.bep3_teamtwee.inventory_service.core.domain.event.ItemEvent;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.ItemNotFound;
@@ -26,6 +27,25 @@ public class ItemsCommandHandler {
         Item item = new Item(command.getProductName(), command.getUnit(), command.getCapacity(),
                 command.getPurchaseCapacity(), command.getSellCapacity(), command.getPurchasePrice(),
                 command.getSellPrice());
+
+        this.publishEventsFor(item);
+        this.repository.save(item);
+
+        return item;
+    }
+
+    public Item handle(UpdateItem command) {
+        Item item = this.repository.findById(command.getId())
+                .orElseThrow(() -> new ItemNotFound(command.getId().toString()));
+
+        item.setProductName(command.getProductName());
+        item.setStock(command.getStock());
+        item.setUnit(command.getUnit());
+        item.setCapacity(command.getCapacity());
+        item.setPurchasePrice(command.getPurchasePrice());
+        item.setPurchaseCapacity(command.getPurchaseCapacity());
+        item.setSellPrice(command.getSellPrice());
+        item.setSellCapacity(command.getSellCapacity());
 
         this.publishEventsFor(item);
         this.repository.save(item);

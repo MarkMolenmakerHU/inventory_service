@@ -4,6 +4,7 @@ import nl.bep3_teamtwee.inventory_service.core.application.ItemsCommandHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsQueryHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.command.BuyStockForItemWithId;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
+import nl.bep3_teamtwee.inventory_service.core.application.command.UpdateItem;
 import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemById;
 import nl.bep3_teamtwee.inventory_service.core.application.query.FindItemsByProductName;
 import nl.bep3_teamtwee.inventory_service.core.application.query.ListItems;
@@ -12,6 +13,7 @@ import nl.bep3_teamtwee.inventory_service.core.domain.Unit;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.InsufficientStockCapacity;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.ItemNotFound;
 import nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request.RegisterItemRequest;
+import nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request.UpdateItemRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +68,11 @@ public class InventoryController {
     public Item buyStockForItemWithId(@PathVariable UUID id) {
         return this.commandHandler.handle(new BuyStockForItemWithId(id));
     }
+
+    @PutMapping("/{id}")
+    public Item updateItemById(@PathVariable UUID id, @Valid @RequestBody UpdateItemRequest request) {
+        return this.commandHandler.handle(new UpdateItem(id, request.productName, Unit.valueOf(request.unit), request.stock, request.capacity,
+                request.purchaseCapacity, request.sellCapacity, request.purchasePrice, request.sellPrice));    }
 
     // Handlers
     @ExceptionHandler

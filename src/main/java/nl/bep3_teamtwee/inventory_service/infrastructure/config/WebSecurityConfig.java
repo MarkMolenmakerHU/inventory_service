@@ -8,17 +8,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.Arrays;
+
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
                 authorizeRequests().antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/**").permitAll().and().
                 requestCache().requestCache(new NullRequestCache()).and().
-                cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().
+                cors().configurationSource(request -> configuration.applyPermitDefaultValues()).and().
                 csrf().disable();
     }
 }

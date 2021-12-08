@@ -81,6 +81,39 @@ public class Item {
         return sellPrice;
     }
 
+    // Setters
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setPurchaseCapacity(int purchaseCapacity) {
+        this.purchaseCapacity = purchaseCapacity;
+    }
+
+    public void setSellCapacity(int sellCapacity) {
+        this.sellCapacity = sellCapacity;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public void setSellPrice(double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
     // Methods
     public void buyStock() {
         if (stock + purchaseCapacity > capacity)
