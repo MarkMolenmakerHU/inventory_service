@@ -23,6 +23,7 @@ POST -> /inventory
 }
 ```
 
-- Update the stock of an Item
+Buy stock for an Item by ID Request:
+POST -> /inventory/{id}/stock
+
 - Sell an Item
-- Buy new stock of an Item
