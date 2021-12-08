@@ -1,6 +1,7 @@
 package nl.bep3_teamtwee.inventory_service.core.domain;
 
 import nl.bep3_teamtwee.inventory_service.core.domain.event.ItemEvent;
+import nl.bep3_teamtwee.inventory_service.core.domain.exception.InsufficientStockCapacity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -43,6 +44,7 @@ public class Item {
         this.sellPrice = sellPrice;
     }
 
+    // Getters
     public UUID getId() {
         return id;
     }
@@ -79,6 +81,16 @@ public class Item {
         return sellPrice;
     }
 
+    // Methods
+    public void buyStock() {
+        if (stock + purchaseCapacity > capacity)
+            throw new InsufficientStockCapacity(
+                    String.format("Capacity of Item: %s is: %s! Buying: %s while current Stock is: %s results in: %s overflow!",
+                    id, capacity, purchaseCapacity, stock, capacity - stock + purchaseCapacity));
+        this.stock += this.purchaseCapacity;
+    }
+
+    // Event Methods
     public void clearEvents() {
         this.events.clear();
     }

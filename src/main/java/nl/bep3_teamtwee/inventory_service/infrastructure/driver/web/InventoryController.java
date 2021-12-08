@@ -2,12 +2,14 @@ package nl.bep3_teamtwee.inventory_service.infrastructure.driver.web;
 
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsCommandHandler;
 import nl.bep3_teamtwee.inventory_service.core.application.ItemsQueryHandler;
+import nl.bep3_teamtwee.inventory_service.core.application.command.BuyStockForItemWithId;
 import nl.bep3_teamtwee.inventory_service.core.application.command.RegisterItem;
 import nl.bep3_teamtwee.inventory_service.core.application.query.GetItemById;
 import nl.bep3_teamtwee.inventory_service.core.application.query.FindItemsByProductName;
 import nl.bep3_teamtwee.inventory_service.core.application.query.ListItems;
 import nl.bep3_teamtwee.inventory_service.core.domain.Item;
 import nl.bep3_teamtwee.inventory_service.core.domain.Unit;
+import nl.bep3_teamtwee.inventory_service.core.domain.exception.InsufficientStockCapacity;
 import nl.bep3_teamtwee.inventory_service.core.domain.exception.ItemNotFound;
 import nl.bep3_teamtwee.inventory_service.infrastructure.driver.web.request.RegisterItemRequest;
 import org.springframework.dao.DuplicateKeyException;
@@ -60,9 +62,20 @@ public class InventoryController {
         return this.queryHandler.handle(new ListItems(orderBy, direction));
     }
 
+    @PostMapping("/{id}/stock")
+    public Item buyStockForItemWithId(@PathVariable UUID id) {
+        return this.commandHandler.handle(new BuyStockForItemWithId(id));
+    }
+
+    // Handlers
     @ExceptionHandler
-    public ResponseEntity<Void> handleItemNotFound(ItemNotFound exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<String> handleItemNotFound(ItemNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInsufficientStockCapacity(InsufficientStockCapacity exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler
