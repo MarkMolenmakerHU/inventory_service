@@ -89,7 +89,7 @@ public class InventoryController {
 
     @ExceptionHandler
     public ResponseEntity<String> handleInsufficientStockCapacity(InsufficientStockCapacity exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
     @ExceptionHandler
